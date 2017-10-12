@@ -1,0 +1,111 @@
+Machine Translation with CFGs and Transduction Grammar
+In this assignment, you will create a Context Free Grammar ('CFG') based on a corpus of data, which can then be used to generate sentences licensed by that CFG. Using the rules of your CFG and an updated transduction lexicon, you will directly translate sentences of English into Spanish. Lastly, you will evaluate the goodness of your machine translation candidates against reference translations from Google Translate.
+
+Part 1
+
+Take the following 12 sentence corpus and construct a CFG.
+I hate this.
+Running is terrible.
+Everything is the worst.
+Sometimes I feel like I was born with a leak.
+Any goodness I started with just slowly spilled out of me.
+Now it is all gone.
+You didn’t know me .
+Then you fell in love with me.
+Now you know me.
+I need to go take a shower.
+I can not tell if I am crying.
+I just spent 7 hours playing with fonts.
+Start with the part of speech tags and decide on an appropriate expansion or contraction (striving for the most parsimonious set of rules). Confirm that your grammar generates the original 12 sentences. I recommend that you use NLTK's POS tagger, CFG generate and ChartParser functionalities to assist you (http://www.nltk.org/_modules/nltk/parse/generate.html & http://www.nltk.org/book/ch05.html & http://www.nltk.org/book/ch08.html), but these are not the only means.
+
+Part 2
+
+Using the following transduction lexicon (English:Spanish), generate word for word Spanish translations for the 12 sentence corpus.
+
+7:7
+this:esto
+the:el
+a:un
+any:cualquier
+all:todo
+like:como
+with:con
+out:fuera
+of:de
+in:en
+with:con
+if:si
+terrible:terrible
+worst:peor
+can:puede
+everything:todo
+leak:fuga
+goodness:bondad
+love:amor
+shower:ducha
+running:corriendo
+hours:horas
+fonts:fuentes
+I:yo
+me:yo
+it:ello
+you:usted
+sometimes:a veces
+just:solo
+slowly:lentamente
+now:ahora
+then:entonces
+not:no
+to:a
+know:saber
+go:ir
+take:tomar
+tell:decir
+was:era
+started:comenzo
+did:hizo
+fell:cayo
+spent:gastado
+crying:llorando
+playing:jugando
+born:nacido
+spilled:derramado
+gone:ido
+hate:odio
+feel:sentir
+know:saber
+need:necesidad
+am:soy
+is:es
+Perform any post-processing needed to clean up the final Spanish output sentences.
+
+Part 3
+
+Calculate the BLEU score of your system by comparing your directly translated Spanish sentences to the following reference translations (Google Translate).
+Odio esto.
+Correr es terrible.
+Todo es lo peor.
+A veces siento que nací con una fuga.
+Cualquier bondad que empecé con sólo se derramó fuera de mí.
+Ahora todo se ha ido.
+No me conoces.
+Entonces te enamoraste de mi.
+Ahora me conoces.
+Necesito ir a bańarme.
+No puedo decir si estoy llorando.
+Acabo de pasar 7 horas jugando con las fuentes.
+Per our discussion in class, if BLEU-1,-2,-3 or -4 has a zero probability, simply omit from the final calculation. No need to consider a brevity penalty.
+
+Submission
+
+Submit the following via Moodle by 11:55 PM on Monday, October 23, 2017 (submission will be open until Tuesday, October 24, 2017 by 11:55 PM for 50% credit):
+
+(1) Your system source code which should rely on your grammar to generate the required Spanish sentences and perform the BLEU comparison calculation.
+
+(2) A system write-up that contains (a) a copy of your CFG's rules and initial lexicon, (b) commentary on your CFG's ability to generalize to unseen data (or issues with over generation) - provide examples, and (c) the results of and commentary on BLEU performance, ideas for improvement, matching or contradiction of expectations, etc.
+
+As indicated in the syllabus, if you so choose, you can work with one person. If you collaborate in this way, submit only one version of the code and write up (indicating the collaborating pairing in the comments of the code).
+
+In terms of the code, feel free to use any libraries you are comfortable with. Additionally, I have no preconceived notion about how the code should be organized for this assignment. This said you should (always) strive for clear, intuitive, well commented code – for example, it should be clear where the calculation of probabilities is happening and where perplexity is being calculated. If the code is not performing as it should and your code is not clear, intuitive or well commented, you run the risk of losing more points if the grader or I can’t figure it out.
+
+Start early, divide, conquer and asks lots of questions.
