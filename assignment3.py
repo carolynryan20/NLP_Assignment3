@@ -1,8 +1,8 @@
-from nltk.parse.generate import generate, demo_grammar
+from nltk.parse.generate import generate
 from nltk.tokenize import word_tokenize
 from nltk import pos_tag
 from nltk.grammar import CFG
-
+from nltk import ChartParser
 
 start_possibles = []
 rules = {}
@@ -28,7 +28,8 @@ def main():
 
     f.close()
 
-    construct_cfg()
+    # construct_cfg()
+    parse()
 
 def construct_cfg():
     grammar_string = "S -> "
@@ -42,9 +43,18 @@ def construct_cfg():
             grammar_string += item + " | "
         grammar_string = grammar_string[:-2] + "\n"
 
+    print(grammar_string)
+
     grammar = CFG.fromstring(grammar_string)
-    for n, sent in enumerate(generate(grammar, n=1000), 1):
-        print('%6d. %s' % (n, ' '.join(sent)))
+    # for n, sent in enumerate(generate(grammar), 1):
+    #     print('%6d. %s' % (n, ' '.join(sent)))
+    return grammar
+
+def parse():
+    parser = ChartParser(construct_cfg())
+    sent = word_tokenize("I just spent 7 hours playing with fonts")
+    for tree in parser.parse(sent):
+        print(tree)
 
 if __name__ == '__main__':
     main()
