@@ -1,51 +1,17 @@
-from nltk.parse.generate import generate
 from nltk.tokenize import word_tokenize
-from nltk import pos_tag
 from nltk.grammar import CFG
 from nltk import ChartParser
 from nltk import ngrams
-import nltk
 
 def getCFG():
-    # make_cfg_rules()
     construct_cfg_from_string()
     parse_original_sentences()
 
-def make_cfg_rules():
-    '''
-    Tokenizes words, no longer in use but helped a ton with the grammar.txt file rule construction
-    Looped over words in corpus and made a mapping of POS -> word, with S being the POS of all original sentences
-    :return: None
-    '''
-    start_possibles = []
-    rules = {}
-    f = open("corpus.txt", "r")
-    for line in f.readlines():
-        word_tokens = word_tokenize(line)
-        line_pos = pos_tag(word_tokens)
-        nltk.parse.CoreNLPParser()
-
-        start = ""
-        for _, tag in line_pos:
-            start += tag + " "
-        start_possibles.append(start[:-3])
-
-        for word, tag in line_pos:
-            if not tag == "." :
-                word = "'"+word+"'"
-                if not rules.get(tag):
-                    rules[tag] = [word]
-                elif word not in rules.get(tag):
-                    rules[tag].append(word)
-
-    f.close()
-
 def construct_cfg_from_string():
-    f = open("new_cfg.txt", "r")
+    f = open("cfg.txt", "r")
     grammar_string = f.readlines()
     grammar = CFG.fromstring(grammar_string)
-    # for n, sent in enumerate(generate(grammar, n=100), 1):
-    #     print('%3d. %s' % (n, ' '.join(sent)))
+    f.close()
     return grammar
 
 def parse_original_sentences():
@@ -58,23 +24,15 @@ def parse_original_sentences():
     working = []
     for line in lines:
         line = line.replace("didnt", "did not")
-        print(line)
         s = "Tree {}:\n".format(count)
         sent = word_tokenize(line[:-2])
         for tree in parser.parse(sent):
             s+= str(tree) + "\n\n"
             working.append(count)
-            print(tree)
             break
         count += 1
         f_write.write(s)
 
-    # TODO Remove this code once done changing CFG
-    s =""
-    for i in range(1, 13):
-        if i not in working:
-            s += str(i) + ", "
-    print(s)
     f.close()
     f_write.close()
     print("Parsed form of original corpus sentences using this CFG can be found in parsed_corpus.txt\n")
@@ -130,7 +88,6 @@ def calc_precision(g_tokens, o_tokens, n):
                 break
 
     if total_tokens != 0:
-        print(str(n)+"gram:",found_count / total_tokens)
         return found_count / total_tokens
     else:
         return 0
@@ -138,22 +95,23 @@ def calc_precision(g_tokens, o_tokens, n):
 def calc_sentence_bleu(g_tokens, o_tokens, f_write):
     bleu_num = 0
     blue_denom = 0
-    print(" ".join(o_tokens))
+    sentence = " ".join(o_tokens)
+    sentence = sentence[0].upper() + sentence[1:]
+    f_write.write(sentence+"\n")
 
     for i in range(1,5):
         precision = calc_precision(g_tokens, o_tokens, i)
         if precision != 0:
             bleu_num += precision
             blue_denom += 1
+        f_write.write("\t{}-Gram precision of {}\n".format(i, round(precision,5)))
 
     if (blue_denom != 0):
         bleu = bleu_num/blue_denom
     else:
         bleu = 0
 
-    sentence = " ".join(o_tokens)
-    sentence = sentence[0].upper() + sentence[1:]
-    f_write.write("{}\n\t\tBLEU Score: {}\n\n".format(sentence, round(bleu, 5)))
+    f_write.write("\n\tTOTAL BLEU Score: {}\n\n".format(round(bleu, 5)))
     return bleu
 
 def bleu_score(translated_sentences):
@@ -169,10 +127,10 @@ def bleu_score(translated_sentences):
         blue_sent += calc_sentence_bleu(g_tokens, o_tokens, f_write)
 
     blue_avg = blue_sent/12
-    print("We have a BLEU score of {} on average for the whole system".format(round(blue_avg,5)))
+    f_write.write("We have a BLEU score of {} on average for the whole system".format(round(blue_avg,5)))
     f.close()
     f_write.close()
-    print("BLEU scores for individual sentences can be seen in bleu_scores.txt")
+    print("BLEU scores for sentences can be seen in bleu_scores.txt")
 
 if __name__ == '__main__':
     getCFG()

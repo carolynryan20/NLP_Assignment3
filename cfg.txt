@@ -1,0 +1,24 @@
+S -> NP VP | VP | RB NP VP | NP RB VP | RB NP | VP
+NP -> PRP | DT | DT JJS | DT NN | NP S | NN | CD NNS | NNS
+VP -> VBG VP | VBD VP | VB VP | VBZ VP | TO VP | MD VP | RB VP
+VP -> VBZ NP | VB NP | RB VBD NP
+VP -> VBN PP | VBD PP | VBG PP | VBD PP
+VP -> VBG | VBN | VB IN S | VBZ JJ
+PP -> IN NP | IN RB | IN PP | PP PP
+
+VB -> 'know' | 'go' | 'take' | 'tell' | 'hate' | 'feel' | 'need' | 'am'
+VBD -> 'was' | 'started' | 'spilled' | 'did' | 'fell' | 'spent'
+VBG -> 'Running' | 'crying' | 'playing'
+VBN -> 'born' | 'gone'
+VBZ -> 'is'
+RB -> 'Sometimes' | 'just' | 'slowly' | 'Now' | 'all' | 'not' | 'Then'
+PRP -> 'I' | 'me' | 'it' | 'You' | 'you'
+DT -> 'this' | 'the' | 'a' | 'Any'
+IN -> 'with' | 'like' | 'of' | 'in' | 'if' | 'out'
+NN -> 'leak' | 'goodness' | 'love' | 'shower' | 'Everything'
+NNS -> 'hours' | 'fonts'
+JJS -> 'worst'
+JJ -> 'terrible'
+MD -> 'can'
+TO -> 'to'
+CD -> '7'
