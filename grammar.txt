@@ -1,15 +1,13 @@
 S -> N V | V
 N -> DT NE | PRP MD NE | N PRP | N V | NE NE | NE INN | NE
-NE -> NN | PRP | NNS | RB
-
-INN -> IN IN | IN N
 
 V -> VE DT | VBG VBZ J | VE DT J | VE VE | VE INN
 V -> VE N | VBZ DT VBN | VBP VB PRP | VBP PRP | TO VB | TO VBP | VBP VBG | VE CD N | VE
 
+INN -> IN IN | IN N
+
+NE -> NN | PRP | NNS | RB
 VE -> VBP | VBD | VBZ | VB | VBN | VBG
-
-
 
 VBP -> 'hate' | 'feel' | 'didnt' | 'know' | 'need' | 'am'
 VBD -> 'was' | 'started' | 'fell' | 'spent'
