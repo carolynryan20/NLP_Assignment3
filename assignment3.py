@@ -11,7 +11,6 @@ def getCFG():
     construct_cfg_from_string()
     parse_original_sentences()
 
-
 def make_cfg_rules():
     '''
     Tokenizes words, no longer in use but helped a ton with the grammar.txt file rule construction
@@ -140,18 +139,6 @@ def calc_sentence_bleu(g_tokens, o_tokens):
     print("BLEU Score: {} for {}".format(bleu, " ".join(o_tokens)))
     return bleu
 
-    # UNIGRAM
-    found_count = 0
-    total_tokens = len(o_tokens)
-    for gtoken in g_tokens:
-        for otoken in o_tokens:
-            if gtoken == otoken:
-                found_count += 1
-                break
-    unigram_precision = found_count/total_tokens
-
-
-
 def bleu_score(translated_sentences):
     f = open("google_translations.txt", "r")
     google_translated_sentences = clean_sentences(f.readlines())
@@ -163,8 +150,6 @@ def bleu_score(translated_sentences):
         calc_sentence_bleu(g_tokens, o_tokens)
 
     f.close()
-
-
 
 if __name__ == '__main__':
     getCFG()
