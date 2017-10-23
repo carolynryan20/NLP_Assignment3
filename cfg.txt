@@ -1,0 +1,26 @@
+S -> N V | V
+N -> RB N | DT N | NN | PRP | PRP MD RB | N PRP | NNS | N V | PRP RB | N N | RB
+V -> VBP DT | VBG VBZ J | V DT J | V VBP | VBD VBN | V IN | V IN IN | V IN N | V N | VBZ DT VBN| VBP VB PRP | VBP PRP | TO VB | TO VBP | VBP VBG | V CD N
+V -> VBP | VBD | VBZ | VB | VBN | V V | VBG
+
+VBP -> 'hate' | 'feel' | 'didnt' | 'know' | 'need' | 'am'
+VBD -> 'was' | 'started' | 'fell' | 'spent'
+VB -> 'know' | 'go' | 'take' | 'tell'
+VBZ -> 'is'
+VBN -> 'born' | 'spilled' | 'gone'
+VBG -> 'Running' | 'crying' | 'playing'
+TO -> 'to'
+
+NN -> 'Everything' | 'leak' | 'goodness' | 'love' | 'shower'
+NNS -> 'hours' | 'fonts'
+
+J -> JJ | JJS
+JJS -> 'worst'
+JJ -> 'terrible'
+
+DT -> 'this' | 'the' | 'a' | 'Any' | 'all' 
+RB -> 'Sometimes' | 'just' | 'slowly' | 'Now' | 'Then' | 'not'
+MD -> 'can'
+IN -> 'like' | 'with' | 'out' | 'of' | 'in' | 'if'
+CD -> '7' 
+PRP -> 'I' | 'me' | 'it' | 'You' | 'you'

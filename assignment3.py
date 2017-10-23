@@ -3,11 +3,23 @@ from nltk.tokenize import word_tokenize
 from nltk import pos_tag
 from nltk.grammar import CFG
 from nltk import ChartParser
+from nltk import ngrams
 
-start_possibles = []
-rules = {}
 
-def main():
+
+def getCFG():
+    construct_cfg_from_string()
+    parse_original_sentences()
+
+
+def make_cfg_rules():
+    '''
+    Tokenizes words, no longer in use but helped a ton with the grammar.txt file rule construction
+    Looped over words in corpus and made a mapping of POS -> word, with S being the POS of all original sentences
+    :return: None
+    '''
+    start_possibles = []
+    rules = {}
     f = open("corpus.txt", "r")
     for line in f.readlines():
         word_tokens = word_tokenize(line)
@@ -28,33 +40,35 @@ def main():
 
     f.close()
 
-    # construct_cfg()
-    parse()
-
-def construct_cfg():
-    grammar_string = "S -> "
-    for start_pos in start_possibles:
-        grammar_string += start_pos + " | "
-    grammar_string = grammar_string[:-2] + "\n"
-
-    for key, value_list in rules.items():
-        grammar_string += key + " -> "
-        for item in value_list:
-            grammar_string += item + " | "
-        grammar_string = grammar_string[:-2] + "\n"
-
-    print(grammar_string)
-
+def construct_cfg_from_string():
+    f = open("grammar.txt", "r")
+    grammar_string = f.readlines()
     grammar = CFG.fromstring(grammar_string)
-    # for n, sent in enumerate(generate(grammar), 1):
-    #     print('%6d. %s' % (n, ' '.join(sent)))
+    #TODO Have infinite grammar structure.....
+    # for n, sent in enumerate(generate(grammar, n=100), 1):
+    #     print('%3d. %s' % (n, ' '.join(sent)))
     return grammar
 
-def parse():
-    parser = ChartParser(construct_cfg())
-    sent = word_tokenize("I just spent 7 hours playing with fonts")
-    for tree in parser.parse(sent):
-        print(tree)
+def parse_original_sentences():
+    grammar = construct_cfg_from_string()
+    parser = ChartParser(grammar)
+    f = open("corpus.txt" , "r")
+    lines = f.readlines()
+    count = 1
+    working = []
+    for line in lines:
+        print("Tree {}:".format(count))
+        sent = word_tokenize(line[:-2])
+        for tree in parser.parse(sent):
+            print(tree)
+            working.append(count)
+            break
+        count += 1
+    s =""
+    for i in range(1, 13):
+        if i not in working:
+            s += str(i) + ", "
+    print(s)
 
 def clean_sentences(sentence_list):
     for i in range(len(sentence_list)):
@@ -93,24 +107,67 @@ def translate_sentences():
     f.close()
     return translated_sentences
 
-def calc_bleu_score(translated_sentences):
+def calc_precision(g_tokens, o_tokens, n):
+    g_ngrams = list(ngrams(g_tokens, n))
+    o_ngrams = list(ngrams(o_tokens, n))
+    found_count = 0
+    total_tokens = len(o_ngrams)
+    for o_ngram in o_ngrams:
+        for g_ngram in g_ngrams:
+            if g_ngram == o_ngram:
+                found_count += 1
+                break
+
+    if total_tokens != 0:
+        return found_count / total_tokens
+    else:
+        return 0
+
+def calc_sentence_bleu(g_tokens, o_tokens):
+    bleu_num = 0
+    blue_denom = 0
+    for i in range(1,5):
+        precision = calc_precision(g_tokens, o_tokens, i)
+        if precision != 0:
+            bleu_num += precision
+            blue_denom += 1
+
+    if (blue_denom != 0):
+        bleu = bleu_num/blue_denom
+    else:
+        bleu = 0
+
+    print("BLEU Score: {} for {}".format(bleu, " ".join(o_tokens)))
+    return bleu
+
+    # UNIGRAM
+    found_count = 0
+    total_tokens = len(o_tokens)
+    for gtoken in g_tokens:
+        for otoken in o_tokens:
+            if gtoken == otoken:
+                found_count += 1
+                break
+    unigram_precision = found_count/total_tokens
+
+
+
+def bleu_score(translated_sentences):
     f = open("google_translations.txt", "r")
     google_translated_sentences = clean_sentences(f.readlines())
     for i in range(len(translated_sentences)):
-        google_sentence = google_translated_sentences[i]
+        google_sentence = google_translated_sentences[i].lower()
         our_translation = translated_sentences[i]
-        print(google_sentence, "\n"+our_translation)
+        g_tokens = google_sentence.split()
+        o_tokens = our_translation.split()
+        calc_sentence_bleu(g_tokens, o_tokens)
 
     f.close()
 
 
 
 if __name__ == '__main__':
-    which_to_run = input("Enter either CFG or T: ").upper()
-    while which_to_run != "CFG" and which_to_run != "T":
-        which_to_run = input("Enter either CFG or T (for translate): ").upper()
-    if which_to_run == "CFG":
-        main()
-    elif which_to_run == "T":
-        translated_sentences = translate_sentences()
-        calc_bleu_score(translated_sentences)
+    getCFG()
+    # translated_sentences = translate_sentences()
+    # print()
+    # bleu_score(translated_sentences)
