@@ -1,2 +1,5 @@
 .idea
+bleu_scores.txt
+parsed_corpus.txt
+translated_sentences.txt
 

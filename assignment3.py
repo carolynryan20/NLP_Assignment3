@@ -50,31 +50,38 @@ def parse_original_sentences():
     grammar = construct_cfg_from_string()
     parser = ChartParser(grammar)
     f = open("corpus.txt" , "r")
+    f_write = open("parsed_corpus.txt", "w")
     lines = f.readlines()
     count = 1
     working = []
     for line in lines:
-        print("Tree {}:".format(count))
+        s = "Tree {}:\n".format(count)
         sent = word_tokenize(line[:-2])
         for tree in parser.parse(sent):
-            print(tree)
+            s+= str(tree) + "\n\n"
             working.append(count)
             break
         count += 1
+        f_write.write(s)
+
+    # TODO Remove this code once done changing CFG
     s =""
     for i in range(1, 13):
         if i not in working:
             s += str(i) + ", "
     print(s)
+    f.close()
+    f_write.close()
+    print("Parsed form of original corpus sentences using this CFG can be found in parsed_corpus.txt\n")
 
 def clean_sentences(sentence_list):
     for i in range(len(sentence_list)):
         sentence = sentence_list[i][:-2]  # remove .\n
-        sentence = sentence.replace('didnt', 'did not')
+        sentence = sentence.replace('didnt', 'did not') # clean input for improved output
         sentence_list[i] = sentence
     return sentence_list
 
-def get_translations():
+def get_translation_dict():
     f = open("translations.txt", "r")
     english_to_spanish_dict = {}
     for line in f.readlines():
@@ -89,7 +96,8 @@ def get_translations():
 
 def translate_sentences():
     f = open("corpus.txt", "r")
-    english_to_spanish_dict = get_translations()
+    f_write = open("translated_sentences.txt", "w")
+    english_to_spanish_dict = get_translation_dict()
     sentence_list = clean_sentences(f.readlines())
     translated_sentences = []
     for sentence in sentence_list:
@@ -99,9 +107,10 @@ def translate_sentences():
             translated_sentence += english_to_spanish_dict[word.lower()] + " "
 
         translated_sentences.append(translated_sentence)
-        print("\nEnglish:", sentence)
-        print("Spanish:", translated_sentence)
+        f_write.write("English: {}\nSpanish: {}\n\n".format(sentence, translated_sentence))
     f.close()
+    f_write.close()
+    print("Translated English to Spanish sentences can be found in translated_sentences.txt\n")
     return translated_sentences
 
 def calc_precision(g_tokens, o_tokens, n):
@@ -120,7 +129,7 @@ def calc_precision(g_tokens, o_tokens, n):
     else:
         return 0
 
-def calc_sentence_bleu(g_tokens, o_tokens):
+def calc_sentence_bleu(g_tokens, o_tokens, f_write):
     bleu_num = 0
     blue_denom = 0
     for i in range(1,5):
@@ -134,23 +143,30 @@ def calc_sentence_bleu(g_tokens, o_tokens):
     else:
         bleu = 0
 
-    print("BLEU Score: {} for {}".format(bleu, " ".join(o_tokens)))
+    sentence = " ".join(o_tokens)
+    sentence = sentence[0].upper() + sentence[1:]
+    f_write.write("{}\n\t\tBLEU Score: {}\n\n".format(sentence, round(bleu, 5)))
     return bleu
 
 def bleu_score(translated_sentences):
     f = open("google_translations.txt", "r")
+    f_write = open("bleu_scores.txt", "w")
     google_translated_sentences = clean_sentences(f.readlines())
+    blue_sent = 0
     for i in range(len(translated_sentences)):
         google_sentence = google_translated_sentences[i].lower()
         our_translation = translated_sentences[i]
         g_tokens = google_sentence.split()
         o_tokens = our_translation.split()
-        calc_sentence_bleu(g_tokens, o_tokens)
+        blue_sent += calc_sentence_bleu(g_tokens, o_tokens, f_write)
 
+    blue_avg = blue_sent/12
+    print("We have a BLEU score of {} on average for the whole system".format(round(blue_avg,5)))
     f.close()
+    f_write.close()
+    print("BLEU scores for individual sentences can be seen in bleu_scores.txt")
 
 if __name__ == '__main__':
     getCFG()
-    # translated_sentences = translate_sentences()
-    # print()
-    # bleu_score(translated_sentences)
+    translated_sentences = translate_sentences()
+    bleu_score(translated_sentences)
