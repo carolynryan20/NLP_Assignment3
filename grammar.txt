@@ -1,7 +1,15 @@
 S -> N V | V
-N -> RB N | DT N | NN | PRP | PRP MD RB | N PRP | NNS | N V | PRP RB | N N | RB
-V -> VBP DT | VBG VBZ J | V DT J | V VBP | VBD VBN | V IN | V IN IN | V IN N | V N | VBZ DT VBN| VBP VB PRP | VBP PRP | TO VB | TO VBP | VBP VBG | V CD N
-V -> VBP | VBD | VBZ | VB | VBN | V V | VBG
+N -> DT NE | PRP MD NE | N PRP | N V | NE NE | NE INN | NE
+NE -> NN | PRP | NNS | RB
+
+INN -> IN IN | IN N
+
+V -> VE DT | VBG VBZ J | VE DT J | VE VE | VE INN
+V -> VE N | VBZ DT VBN | VBP VB PRP | VBP PRP | TO VB | TO VBP | VBP VBG | VE CD N | VE
+
+VE -> VBP | VBD | VBZ | VB | VBN | VBG
+
+
 
 VBP -> 'hate' | 'feel' | 'didnt' | 'know' | 'need' | 'am'
 VBD -> 'was' | 'started' | 'fell' | 'spent'

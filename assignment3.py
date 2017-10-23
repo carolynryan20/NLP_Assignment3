@@ -5,8 +5,6 @@ from nltk.grammar import CFG
 from nltk import ChartParser
 from nltk import ngrams
 
-
-
 def getCFG():
     construct_cfg_from_string()
     parse_original_sentences()
