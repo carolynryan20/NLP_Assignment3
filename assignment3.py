@@ -4,8 +4,10 @@ from nltk import pos_tag
 from nltk.grammar import CFG
 from nltk import ChartParser
 from nltk import ngrams
+import nltk
 
 def getCFG():
+    # make_cfg_rules()
     construct_cfg_from_string()
     parse_original_sentences()
 
@@ -21,6 +23,7 @@ def make_cfg_rules():
     for line in f.readlines():
         word_tokens = word_tokenize(line)
         line_pos = pos_tag(word_tokens)
+        nltk.parse.CoreNLPParser()
 
         start = ""
         for _, tag in line_pos:
@@ -38,10 +41,9 @@ def make_cfg_rules():
     f.close()
 
 def construct_cfg_from_string():
-    f = open("grammar.txt", "r")
+    f = open("new_cfg.txt", "r")
     grammar_string = f.readlines()
     grammar = CFG.fromstring(grammar_string)
-    #TODO Have infinite grammar structure.....
     # for n, sent in enumerate(generate(grammar, n=100), 1):
     #     print('%3d. %s' % (n, ' '.join(sent)))
     return grammar
@@ -55,11 +57,14 @@ def parse_original_sentences():
     count = 1
     working = []
     for line in lines:
+        line = line.replace("didnt", "did not")
+        print(line)
         s = "Tree {}:\n".format(count)
         sent = word_tokenize(line[:-2])
         for tree in parser.parse(sent):
             s+= str(tree) + "\n\n"
             working.append(count)
+            print(tree)
             break
         count += 1
         f_write.write(s)
@@ -125,6 +130,7 @@ def calc_precision(g_tokens, o_tokens, n):
                 break
 
     if total_tokens != 0:
+        print(str(n)+"gram:",found_count / total_tokens)
         return found_count / total_tokens
     else:
         return 0
@@ -132,6 +138,8 @@ def calc_precision(g_tokens, o_tokens, n):
 def calc_sentence_bleu(g_tokens, o_tokens, f_write):
     bleu_num = 0
     blue_denom = 0
+    print(" ".join(o_tokens))
+
     for i in range(1,5):
         precision = calc_precision(g_tokens, o_tokens, i)
         if precision != 0:
