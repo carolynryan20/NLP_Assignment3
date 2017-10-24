@@ -100,9 +100,12 @@ Submission
 
 Submit the following via Moodle by 11:55 PM on Monday, October 23, 2017 (submission will be open until Tuesday, October 24, 2017 by 11:55 PM for 50% credit):
 
-(1) Your system source code which should rely on your grammar to generate the required Spanish sentences and perform the BLEU comparison calculation.
+(1) Your system source code which should rely on your grammar to generate the required Spanish sentences and
+perform the BLEU comparison calculation.
 
-(2) A system write-up that contains (a) a copy of your CFG's rules and initial lexicon, (b) commentary on your CFG's ability to generalize to unseen data (or issues with over generation) - provide examples, and (c) the results of and commentary on BLEU performance, ideas for improvement, matching or contradiction of expectations, etc.
+(2) A system write-up that contains (a) a copy of your CFG's rules and initial lexicon,
+(b) commentary on your CFG's ability to generalize to unseen data (or issues with over generation) - provide examples, and
+(c) the results of and commentary on BLEU performance, ideas for improvement, matching or contradiction of expectations, etc.
 
 As indicated in the syllabus, if you so choose, you can work with one person. If you collaborate in this way, submit only one version of the code and write up (indicating the collaborating pairing in the comments of the code).
 
